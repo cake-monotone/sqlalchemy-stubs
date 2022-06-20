@@ -42,17 +42,17 @@ def find_stub_files():
 
 
 setup(name='sqlalchemy-stubs',
-      version='0.4.dev1',
+      version='0.4',
       description=description,
       long_description=install_instructions,
       long_description_content_type='text/markdown',
       author='Ivan Levkivskyi',
       author_email='levkivskyi@gmail.com',
-      license='MIT License',
+      license='Apache 2.0',
       url="https://github.com/dropbox/sqlalchemy-stubs",
       py_modules=['sqlmypy', 'sqltyping'],
       install_requires=[
-          'mypy>=0.720',
+          'mypy>=0.790',
           'typing-extensions>=3.7.4'
       ],
       packages=['sqlalchemy-stubs'],

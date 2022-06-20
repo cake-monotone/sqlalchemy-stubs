@@ -200,7 +200,9 @@ def decl_info_hook(ctx: DynamicClassDefContext) -> None:
 
     info = TypeInfo(SymbolTable(), class_def, ctx.api.cur_mod_id)
     class_def.info = info
-    obj = ctx.api.builtin_type('builtins.object')
+    # use builtin_type if it exists, otherwise named_type
+    # mypy .930 deprecated builtin_type, but it was added back in in .931
+    obj = ctx.api.builtin_type('builtins.object') if hasattr(ctx.api, "builtin_type") else ctx.api.named_type('builtins.object')
     info.bases = cls_bases or [obj]
     try:
         calculate_mro(info)
@@ -396,10 +398,10 @@ def relationship_hook(ctx: FunctionContext) -> Type:
             # Something complex, stay silent for now.
             new_arg = AnyType(TypeOfAny.special_form)
 
-    # We figured out, the model type. Now check if we need to wrap it in Iterable
+    # We figured out, the model type. Now check if we need to wrap it in List
     if uselist_arg:
         if parse_bool(uselist_arg):
-            new_arg = ctx.api.named_generic_type('typing.Iterable', [new_arg])
+            new_arg = ctx.api.named_generic_type('builtins.list', [new_arg])
     else:
         if has_annotation:
             # If there is an annotation we use it as a source of truth.
